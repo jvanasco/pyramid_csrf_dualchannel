@@ -33,7 +33,9 @@ class MockResponse(object):
         self.headerlist = []
 
 
-class TestCookieCSRFStoragePolicy_Plain(unittest.TestCase):
+class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
+    """tests on the insecure channel"""
+
     def _makeOne(self, **kw):
         return DualCookieCSRFStoragePolicy(**kw)
 
@@ -105,7 +107,9 @@ class TestCookieCSRFStoragePolicy_Plain(unittest.TestCase):
         self.assertFalse(policy.check_csrf_token(request, 'bar'))
 
 
-class TestCookieCSRFStoragePolicy_HTTPS(unittest.TestCase):
+class TestCookieCSRFStoragePolicy_SecureHTTPS(unittest.TestCase):
+    """tests on the SECURE HTTPS"""
+
     def _makeOne(self, **kw):
         return DualCookieCSRFStoragePolicy(**kw)
 
