@@ -22,7 +22,7 @@ import re
 with open(
         os.path.join(
             os.path.dirname(__file__),
-            'pyramid_csrf_dualchannel', '__init__.py')) as v_file:
+            'pyramid_csrf_multi_scheme', '__init__.py')) as v_file:
     VERSION = re.compile(
         r".*__VERSION__ = '(.*?)'",
         re.S).match(v_file.read()).group(1)
@@ -39,9 +39,9 @@ requires = [
 ]
 
 setup(
-    name="pyramid_csrf_dualchannel",
+    name="pyramid_csrf_multi_scheme",
     version=VERSION,
-    description="provides for creating independent csrf tokens on http and https channels",
+    description="provides for creating independent csrf tokens for the http and https schemes",
     long_description=README,
     classifiers=[
         "Intended Audience :: Developers",
@@ -50,16 +50,16 @@ setup(
         "License :: Repoze Public License",
     ],
     keywords="web pyramid csrf",
-    packages=['pyramid_csrf_dualchannel',
-              'pyramid_csrf_dualchannel.tests',
+    packages=['pyramid_csrf_multi_scheme',
+              'pyramid_csrf_multi_scheme.tests',
               ],
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
-    url="https://github.com/jvanasco/pyramid_csrf_dualchannel",
+    url="https://github.com/jvanasco/pyramid_csrf_multi_scheme",
     license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
     include_package_data=True,
     zip_safe=False,
     tests_require = requires,
     install_requires = requires,
-    test_suite="pyramid_csrf_dualchannel.tests",
+    test_suite="pyramid_csrf_multi_scheme.tests",
 )

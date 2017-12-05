@@ -16,7 +16,10 @@ from pyramid.util import (
 )
 
 
-__VERSION__ = '0.0.0'
+__VERSION__ = '0.0.1'
+
+
+# ==============================================================================
 
 
 @implementer(ICSRFStoragePolicy)
