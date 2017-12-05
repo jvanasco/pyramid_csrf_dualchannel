@@ -21,12 +21,13 @@ class DummyRequest(object):
 
     def add_response_callback(self, callback):
         self.response_callbacks.append(callback)
-    
+
     def response_callback(self, request, response):
         while len(self.response_callbacks):
             callback = self.response_callbacks.pop()
             callback(request, response)
-            
+
+
 class MockResponse(object):
     def __init__(self):
         self.headerlist = []
@@ -123,14 +124,14 @@ class TestCookieCSRFStoragePolicy_HTTPS(unittest.TestCase):
         token_secure = policy.get_csrf_token(request)
         token_http = policy.get_csrf_token_scheme(request, 'http')
         request.response_callback(request, response)
-        
+
         self.assertEqual(
             response.headerlist,
             [('Set-Cookie', 'csrf_https={}; Path=/; secure'.format(token_secure)),
              ('Set-Cookie', 'csrf_http={}; Path=/'.format(token_http))
              ]
         )
-        
+
     def test_existing_cookie_csrf_does_not_set_cookie(self):
         request = DummyRequest(scheme='https')
         request.cookies = {'csrf_https': 'e6f325fee5974f3da4315a8ccf4513d2'}
@@ -158,7 +159,7 @@ class TestCookieCSRFStoragePolicy_HTTPS(unittest.TestCase):
             response.headerlist,
             [('Set-Cookie', 'csrf_https={}; Path=/; secure'.format(token_secure)),
              ('Set-Cookie', 'csrf_http={}; Path=/'.format(token_http))
-            ]
+             ]
         )
 
     def test_get_csrf_token_returns_the_new_token(self):
