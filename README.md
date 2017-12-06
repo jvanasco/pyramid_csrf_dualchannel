@@ -22,6 +22,21 @@ Is this necessary?
 
 I'm not sure, but have decided to err on the side of caution.  HTTP traffic is sent in plaintext and capable of being intercepted by a man-in-the-middle or network packet sniffing.  It seems plausible that someone might read a csrf token via HTTP and use that in attempts to compromise HTTPS endpoints.  A better option would be only using HTTPS tokens and forms - but that is not always an option.
 
+
+debugtoolbar support!
+---------------------
+
+just add to your development.ini
+
+	debugtoolbar.includes = pyramid_csrf_multi_scheme.debugtoolbar
+
+the debugtoolbar will now have a `CSRFMultiScheme` panel that has the following info:
+
+* configuration info on the cookie names
+* incoming request csrf values
+* outgoing response csrf values
+
+
 License
 -------
 
