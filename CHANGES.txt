@@ -1,3 +1,6 @@
+0.0.4
+	fixed an issue with debugtoolbar support that caused errors with base64 encoded cookies
+
 0.0.3
 	packaging fix
 

@@ -71,13 +71,17 @@ class CSRFMultiSchemeDebugPanel(DebugPanel):
         #  ('Set-Cookie', 'ci_s_ck=iG6dqE5mff_iR2Y95o5eENuVdC; Domain=.dev.example.com; Path=/')
         #  ]
         for ck in cookies:
-            ck_parts = ck[1].split(';')
-            (ck_name, ck_value) = ck_parts[0].split('=')
-            if ck_name in self._cookie_names:
-                if ck_name == self.data['request_data']['cookie_secure']['cookie_name']:
-                    self.data['request_data']['cookie_secure']['out'] = ck_value
-                elif ck_name == self.data['request_data']['cookie_http']['cookie_name']:
-                    self.data['request_data']['cookie_http']['out'] = ck_value
+            try:
+                ck_parts = ck[1].split(';')
+                (ck_name, ck_value) = ck_parts[0].split('=', 1)  # maxsplit 1, because the value could be an encoding with == as a right pad
+                if ck_name in self._cookie_names:
+                    if ck_name == self.data['request_data']['cookie_secure']['cookie_name']:
+                        self.data['request_data']['cookie_secure']['out'] = ck_value
+                    elif ck_name == self.data['request_data']['cookie_http']['cookie_name']:
+                        self.data['request_data']['cookie_http']['out'] = ck_value
+            except Exception as e:
+                # TODO: logging
+                pass
 
     @property
     def nav_title(self):
