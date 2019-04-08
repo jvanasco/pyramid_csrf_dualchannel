@@ -4,19 +4,16 @@ from webob.cookies import CookieProfile
 from zope.interface import implementer
 
 
-from pyramid.authentication import _SimpleSerializer
-
 from pyramid.compat import (
     bytes_,
     text_,
 )
 from pyramid.interfaces import ICSRFStoragePolicy
-from pyramid.util import (
-    strings_differ
-)
+from pyramid.util import strings_differ
+from pyramid.util import SimpleSerializer
 
 
-__VERSION__ = '0.0.4'
+__VERSION__ = '0.0.5'
 
 
 # ==============================================================================
@@ -26,7 +23,7 @@ __VERSION__ = '0.0.4'
 class DualCookieCSRFStoragePolicy(object):
     """
     A re-implementation of Pyramid's CookieCSRFStoragePolicy.
-    This policy runs separate csrf tokes on http and https connections.
+    This policy runs separate csrf tokens on http and https connections.
     """
     _token_factory = staticmethod(lambda: text_(uuid.uuid4().hex))
 
@@ -36,7 +33,7 @@ class DualCookieCSRFStoragePolicy(object):
         cookie_name_http='csrf_http',
         httponly=False, domain=None, max_age=None, path='/'
     ):
-        serializer = _SimpleSerializer()
+        serializer = SimpleSerializer()
         self.cookie_name_secure = cookie_name_secure
         self.cookie_name_http = cookie_name_http
         self.cookie_profile_secure = CookieProfile(

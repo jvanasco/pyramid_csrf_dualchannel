@@ -1,3 +1,6 @@
+0.0.5
+	updated to use current pyramid api
+
 0.0.4
 	fixed an issue with debugtoolbar support that caused errors with base64 encoded cookies
 
