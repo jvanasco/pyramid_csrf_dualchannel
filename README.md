@@ -14,13 +14,13 @@ If the current scheme is insecure http:
 Why?
 ----
 
-If an app supports both HTTP and HTTPS endpoints in parts, there may be a desire to shield the SECURE HTTPS token from the insecure http traffic.
+If an app supports both HTTP and HTTPS endpoints, this package simplifies isolating the CSRF data from both.
 
 
 Is this necessary?
 ------------------
 
-I'm not sure, but have decided to err on the side of caution.  HTTP traffic is sent in plaintext and capable of being intercepted by a man-in-the-middle or network packet sniffing.  It seems plausible that someone might read a csrf token via HTTP and use that in attempts to compromise HTTPS endpoints.  A better option would be only using HTTPS tokens and forms - but that is not always an option.
+I'm not sure, but have decided to err on the side of caution.  HTTP traffic is sent in plaintext and capable of being intercepted by a man-in-the-middle or network packet sniffing.  It seems plausible that someone might read a csrf token via HTTP and use that in attempts to compromise HTTPS endpoints in a mixed use environment.  A better option would be only using HTTPS tokens and forms - but that is not always an option.
 
 
 debugtoolbar support!

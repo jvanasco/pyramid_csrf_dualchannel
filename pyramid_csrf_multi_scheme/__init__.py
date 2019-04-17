@@ -3,17 +3,14 @@ import uuid
 from webob.cookies import CookieProfile
 from zope.interface import implementer
 
-
-from pyramid.compat import (
-    bytes_,
-    text_,
-)
+from pyramid.compat import bytes_
+from pyramid.compat import text_
 from pyramid.interfaces import ICSRFStoragePolicy
 from pyramid.util import strings_differ
 from pyramid.util import SimpleSerializer
 
 
-__VERSION__ = '0.0.5'
+__VERSION__ = '0.0.6'
 
 
 # ==============================================================================
@@ -22,8 +19,20 @@ __VERSION__ = '0.0.5'
 @implementer(ICSRFStoragePolicy)
 class DualCookieCSRFStoragePolicy(object):
     """
-    A re-implementation of Pyramid's CookieCSRFStoragePolicy.
+    A re-implementation of ``pyramid.csrf.CookieCSRFStoragePolicy``.
     This policy runs separate csrf tokens on http and https connections.
+
+    If the connection is https:
+        expiring the csrf will expire the http and https
+        only the https csrf will be consulted
+
+    If the connection is http:
+        expiring the csrf will expire the http
+        only the http csrf will be consulted
+    
+    last synced to pyramid: 1.10.4
+    
+    NOTE: this does not support a ``secure`` argument
     """
     _token_factory = staticmethod(lambda: text_(uuid.uuid4().hex))
 
@@ -31,8 +40,16 @@ class DualCookieCSRFStoragePolicy(object):
         self,
         cookie_name_secure='csrf_https',
         cookie_name_http='csrf_http',
-        httponly=False, domain=None, max_age=None, path='/'
+        secure=None,
+        httponly=False,
+        domain=None,
+        max_age=None,
+        path='/',
+        samesite='Lax',
     ):
+        if secure is not None:
+            raise ValueError("`DualCookieCSRFStoragePolicy` does not support "
+                             "the `secure` argument.")
         serializer = SimpleSerializer()
         self.cookie_name_secure = cookie_name_secure
         self.cookie_name_http = cookie_name_http
@@ -43,7 +60,8 @@ class DualCookieCSRFStoragePolicy(object):
             httponly=httponly,
             path=path,
             domains=[domain],
-            serializer=serializer
+            serializer=serializer,
+            samesite=samesite,
         )
         self.cookie_profile_http = CookieProfile(
             cookie_name=cookie_name_http,
@@ -52,8 +70,20 @@ class DualCookieCSRFStoragePolicy(object):
             httponly=httponly,
             path=path,
             domains=[domain],
-            serializer=serializer
+            serializer=serializer,
+            samesite=samesite,
         )
+
+    @property
+    def cookie_profile(self):
+        """
+        Returns the active cookie profile for the request's scheme.
+        """
+        raise ValueError("`DualCookieCSRFStoragePolicy` supports access "
+                         "via the attributes `.cookie_profile_secure` and "
+                         "via the attributes `.cookie_profile_http`. The "
+                         "attribute `.cookie_profile` is not supported."
+                         )
 
     def new_csrf_token(self, request):
         """ Sets a new CSRF token into the request and returns it. """
@@ -82,21 +112,27 @@ class DualCookieCSRFStoragePolicy(object):
             request.add_response_callback(_set_cookie)
             return token
 
+        # if we are on https, reset the http and https
+        # but only consult the https for data
         if request.scheme == 'https':
             token_http = _token_http()  # noqa
             token_secure = _token_secure()
             return token_secure
 
-        # otherwise, set the https
+        # otherwise, set only the http insecure cookie
         token_http = _token_http()
         return token_http
 
     def get_csrf_token(self, request):
-        """ Returns the currently active CSRF token by checking the cookies
-        sent with the current request."""
+        """
+        Returns the currently active CSRF token by checking the cookies
+        sent with the current request.
+        """
         if request.scheme == 'https':
+            # only consult the secure cookie
             bound_cookies = self.cookie_profile_secure.bind(request)
         else:
+            # the only accessible cookie is http insecure
             bound_cookies = self.cookie_profile_http.bind(request)
         token = bound_cookies.get_value()
         if not token:

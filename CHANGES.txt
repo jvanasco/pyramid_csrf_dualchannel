@@ -1,5 +1,10 @@
+0.0.6
+	docs
+	further compat with Pyramid v1.10.4
+	added some errors in case 
+
 0.0.5
-	updated to use current pyramid api
+	updated to use current Pyramid api v1.10.x
 
 0.0.4
 	fixed an issue with debugtoolbar support that caused errors with base64 encoded cookies

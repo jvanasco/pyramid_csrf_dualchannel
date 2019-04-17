@@ -55,9 +55,21 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_http={}; Path=/'.format(token))]
+            [('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token))]
         )
 
+    def test_get_cookie_csrf_nondefault_samesite(self):
+        response = MockResponse()
+        request = DummyRequest()
+
+        policy = self._makeOne(samesite=None)
+        token = policy.get_csrf_token(request)
+        request.response_callback(request, response)
+        self.assertEqual(
+            response.headerlist,
+            [('Set-Cookie', 'csrf_http={}; Path=/'.format(token))],
+        )
+        
     def test_existing_cookie_csrf_does_not_set_cookie(self):
         request = DummyRequest()
         request.cookies = {'csrf_http': 'e6f325fee5974f3da4315a8ccf4513d2'}
@@ -82,7 +94,7 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_http={}; Path=/'.format(token))]
+            [('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token))]
         )
 
     def test_get_csrf_token_returns_the_new_token(self):
@@ -131,6 +143,21 @@ class TestCookieCSRFStoragePolicy_SecureHTTPS(unittest.TestCase):
 
         self.assertEqual(
             response.headerlist,
+            [('Set-Cookie', 'csrf_https={}; Path=/; secure; SameSite=Lax'.format(token_secure)),
+             ('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token_http))
+             ]
+        )
+
+    def test_get_cookie_csrf_nondefault_samesite(self):
+        response = MockResponse()
+        request = DummyRequest(scheme='https')
+
+        policy = self._makeOne(samesite=None)
+        token_secure = policy.get_csrf_token(request)
+        token_http = policy.get_csrf_token_scheme(request, 'http')
+        request.response_callback(request, response)
+        self.assertEqual(
+            response.headerlist,
             [('Set-Cookie', 'csrf_https={}; Path=/; secure'.format(token_secure)),
              ('Set-Cookie', 'csrf_http={}; Path=/'.format(token_http))
              ]
@@ -161,8 +188,8 @@ class TestCookieCSRFStoragePolicy_SecureHTTPS(unittest.TestCase):
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_https={}; Path=/; secure'.format(token_secure)),
-             ('Set-Cookie', 'csrf_http={}; Path=/'.format(token_http))
+            [('Set-Cookie', 'csrf_https={}; Path=/; secure; SameSite=Lax'.format(token_secure)),
+             ('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token_http))
              ]
         )
 

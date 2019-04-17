@@ -35,7 +35,7 @@ except:
     README = ''
 
 requires = [
-    "pyramid",
+    "pyramid>=1.10.4",
 ]
 
 setup(
