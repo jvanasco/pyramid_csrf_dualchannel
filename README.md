@@ -1,7 +1,7 @@
 pyramid_csrf_multi_scheme
 =========================
 
-This script enables two separate cookie tokens on each request, bound to the scheme: a SECURE HTTPS only cookie and a mixed-use insecure http token (that is also available on https).
+This package enables two separate cookie tokens on each request, bound to the scheme: a SECURE HTTPS only cookie and a mixed-use insecure http token (that is also available on https).
 
 If the current scheme is HTTPS:
 	only the SECURE HTTPS token will be considered
@@ -9,6 +9,11 @@ If the current scheme is HTTPS:
 
 If the current scheme is insecure http:
 	the SECURE HTTPS tokens are ignored as they are not even available, and only the insecure http token is considered.
+
+Python Versions
+---------------
+
+This package is currently supported under Python2.7 and 3.6. Other 3.x versions may work.
 
 
 Why?
