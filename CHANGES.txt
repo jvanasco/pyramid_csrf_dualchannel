@@ -1,3 +1,6 @@
+0.0.9
+	includeme registers the panel with `extra_panels` instead of `panels`
+
 0.0.8
 	version bump to note Python3 classifier. no code changes.
 
