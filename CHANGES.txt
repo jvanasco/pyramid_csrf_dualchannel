@@ -1,5 +1,5 @@
 0.0.9
-	includeme registers the panel with `extra_panels` instead of `panels`
+	includeme registers the panel via the api method `config.add_debugtoolbar_panel()`
 
 0.0.8
 	version bump to note Python3 classifier. no code changes.
