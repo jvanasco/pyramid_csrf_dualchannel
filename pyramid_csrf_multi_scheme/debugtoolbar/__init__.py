@@ -1,5 +1,6 @@
 from .panels.csrf_multi_scheme import CSRFMultiSchemeDebugPanel
 
+
 def includeme(config):
     """
     Pyramid API hook

@@ -69,7 +69,7 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
             response.headerlist,
             [('Set-Cookie', 'csrf_http={}; Path=/'.format(token))],
         )
-        
+
     def test_existing_cookie_csrf_does_not_set_cookie(self):
         request = DummyRequest()
         request.cookies = {'csrf_http': 'e6f325fee5974f3da4315a8ccf4513d2'}

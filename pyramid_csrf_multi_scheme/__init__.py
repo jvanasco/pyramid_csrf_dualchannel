@@ -29,9 +29,9 @@ class DualCookieCSRFStoragePolicy(object):
     If the connection is http:
         expiring the csrf will expire the http
         only the http csrf will be consulted
-    
+
     last synced to pyramid: 1.10.4
-    
+
     NOTE: this does not support a ``secure`` argument
     """
     _token_factory = staticmethod(lambda: text_(uuid.uuid4().hex))
