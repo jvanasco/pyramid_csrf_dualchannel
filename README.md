@@ -1,14 +1,20 @@
 pyramid_csrf_multi_scheme
 =========================
 
-This package enables two separate cookie tokens on each request, bound to the scheme: a SECURE HTTPS only cookie and a mixed-use insecure http token (that is also available on https).
+This package enables two separate cookie tokens on each request, bound to the scheme:
+
+* a SECURE HTTPS only cookie
+* a mixed-use insecure http token (which is also available on https).
 
 If the current scheme is HTTPS:
-	only the SECURE HTTPS token will be considered
-	HOWEVER calls to generate a new token will reset both the SECURE HTTPS and the insecure http tokens.
+
+* only the SECURE HTTPS token will be considered
+* HOWEVER calls to generate a new token will reset both the SECURE HTTPS and the insecure http tokens.
 
 If the current scheme is insecure http:
-	the SECURE HTTPS tokens are ignored as they are not even available, and only the insecure http token is considered.
+
+* the SECURE HTTPS tokens are ignored as they are not even available, and only the insecure http token is considered.
+
 
 Python Versions
 ---------------
@@ -19,13 +25,16 @@ This package is currently supported under Python2.7 and 3.6. Other 3.x versions 
 Why?
 ----
 
-If an app supports both HTTP and HTTPS endpoints, this package simplifies isolating the CSRF data from both.
+If an application supports both `HTTP` and `HTTPS` endpoints, this package simplifies isolating the CSRF data from both.
 
 
 Is this necessary?
 ------------------
 
-I'm not sure, but have decided to err on the side of caution.  HTTP traffic is sent in plaintext and capable of being intercepted by a man-in-the-middle or network packet sniffing.  It seems plausible that someone might read a csrf token via HTTP and use that in attempts to compromise HTTPS endpoints in a mixed use environment.  A better option would be only using HTTPS tokens and forms - but that is not always an option.
+I'm not sure, but have decided to err on the side of caution.
+HTTP traffic is sent in plaintext and capable of being intercepted by a man-in-the-middle or network packet sniffing.
+It seems plausible that someone might read a csrf token via HTTP and use that in attempts to compromise HTTPS endpoints in a mixed use environment.
+A better option would be only using HTTPS tokens and forms - but that is not always an option.
 
 
 debugtoolbar support!
@@ -33,7 +42,7 @@ debugtoolbar support!
 
 just add to your development.ini
 
-	debugtoolbar.includes = pyramid_csrf_multi_scheme.debugtoolbar
+    debugtoolbar.includes = pyramid_csrf_multi_scheme.debugtoolbar
 
 the debugtoolbar will now have a `CSRFMultiScheme` panel that has the following info:
 
