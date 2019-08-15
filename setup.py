@@ -27,12 +27,6 @@ with open(
         r".*__VERSION__ = '(.*?)'",
         re.S).match(v_file.read()).group(1)
 
-try:
-    here = os.path.abspath(os.path.dirname(__file__))
-    README = open(os.path.join(here, "README.md")).read()
-    README = README.split("\n\n", 1)[0] + "\n"
-except:
-    README = ''
 
 requires = [
     "pyramid>=1.10.4",
@@ -42,7 +36,11 @@ setup(
     name="pyramid_csrf_multi_scheme",
     version=VERSION,
     description="provides for creating independent csrf tokens for the http and https schemes",
-    long_description=README,
+    long_description="""This package enables two separate cookie tokens on each request, bound to the scheme:
+
+* a secure HTTPS-only cookie
+* a mixed-use INSECURE http token
+""",
     classifiers=[
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
