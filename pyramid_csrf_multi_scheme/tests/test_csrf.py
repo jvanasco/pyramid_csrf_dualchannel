@@ -12,7 +12,7 @@ class DummyRequest(object):
     response_callbacks = None
     scheme = None
 
-    def __init__(self, registry=None, session=None, scheme='http'):
+    def __init__(self, registry=None, session=None, scheme="http"):
         self.registry = registry
         self.session = session
         self.cookies = {}
@@ -55,7 +55,7 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token))]
+            [("Set-Cookie", "csrf_http={}; Path=/; SameSite=Lax".format(token))],
         )
 
     def test_get_cookie_csrf_nondefault_samesite(self):
@@ -66,26 +66,22 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
         token = policy.get_csrf_token(request)
         request.response_callback(request, response)
         self.assertEqual(
-            response.headerlist,
-            [('Set-Cookie', 'csrf_http={}; Path=/'.format(token))],
+            response.headerlist, [("Set-Cookie", "csrf_http={}; Path=/".format(token))]
         )
 
     def test_existing_cookie_csrf_does_not_set_cookie(self):
         request = DummyRequest()
-        request.cookies = {'csrf_http': 'e6f325fee5974f3da4315a8ccf4513d2'}
+        request.cookies = {"csrf_http": "e6f325fee5974f3da4315a8ccf4513d2"}
 
         policy = self._makeOne()
         token = policy.get_csrf_token(request)
 
-        self.assertEqual(
-            token,
-            'e6f325fee5974f3da4315a8ccf4513d2'
-        )
+        self.assertEqual(token, "e6f325fee5974f3da4315a8ccf4513d2")
         self.assertEqual(len(request.response_callbacks), 0)
 
     def test_new_cookie_csrf_with_existing_cookie_sets_cookies(self):
         request = DummyRequest()
-        request.cookies = {'csrf_http': 'e6f325fee5974f3da4315a8ccf4513d2'}
+        request.cookies = {"csrf_http": "e6f325fee5974f3da4315a8ccf4513d2"}
 
         policy = self._makeOne()
         token = policy.new_csrf_token(request)
@@ -94,29 +90,29 @@ class TestCookieCSRFStoragePolicy_InsecureHttp(unittest.TestCase):
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token))]
+            [("Set-Cookie", "csrf_http={}; Path=/; SameSite=Lax".format(token))],
         )
 
     def test_get_csrf_token_returns_the_new_token(self):
         request = DummyRequest()
-        request.cookies = {'csrf_http': 'foo'}
+        request.cookies = {"csrf_http": "foo"}
 
         policy = self._makeOne()
-        self.assertEqual(policy.get_csrf_token(request), 'foo')
+        self.assertEqual(policy.get_csrf_token(request), "foo")
 
         token = policy.new_csrf_token(request)
-        self.assertNotEqual(token, 'foo')
+        self.assertNotEqual(token, "foo")
         self.assertEqual(token, policy.get_csrf_token(request))
 
     def test_check_csrf_token(self):
         request = DummyRequest()
 
         policy = self._makeOne()
-        self.assertFalse(policy.check_csrf_token(request, 'foo'))
+        self.assertFalse(policy.check_csrf_token(request, "foo"))
 
-        request.cookies = {'csrf_http': 'foo'}
-        self.assertTrue(policy.check_csrf_token(request, 'foo'))
-        self.assertFalse(policy.check_csrf_token(request, 'bar'))
+        request.cookies = {"csrf_http": "foo"}
+        self.assertTrue(policy.check_csrf_token(request, "foo"))
+        self.assertFalse(policy.check_csrf_token(request, "bar"))
 
 
 class TestCookieCSRFStoragePolicy_SecureHTTPS(unittest.TestCase):
@@ -134,82 +130,88 @@ class TestCookieCSRFStoragePolicy_SecureHTTPS(unittest.TestCase):
 
     def test_get_cookie_csrf_with_no_existing_cookie_sets_cookies(self):
         response = MockResponse()
-        request = DummyRequest(scheme='https')
+        request = DummyRequest(scheme="https")
 
         policy = self._makeOne()
         token_secure = policy.get_csrf_token(request)
-        token_http = policy.get_csrf_token_scheme(request, 'http')
+        token_http = policy.get_csrf_token_scheme(request, "http")
         request.response_callback(request, response)
 
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_https={}; Path=/; secure; SameSite=Lax'.format(token_secure)),
-             ('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token_http))
-             ]
+            [
+                (
+                    "Set-Cookie",
+                    "csrf_https={}; Path=/; secure; SameSite=Lax".format(token_secure),
+                ),
+                ("Set-Cookie", "csrf_http={}; Path=/; SameSite=Lax".format(token_http)),
+            ],
         )
 
     def test_get_cookie_csrf_nondefault_samesite(self):
         response = MockResponse()
-        request = DummyRequest(scheme='https')
+        request = DummyRequest(scheme="https")
 
         policy = self._makeOne(samesite=None)
         token_secure = policy.get_csrf_token(request)
-        token_http = policy.get_csrf_token_scheme(request, 'http')
+        token_http = policy.get_csrf_token_scheme(request, "http")
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_https={}; Path=/; secure'.format(token_secure)),
-             ('Set-Cookie', 'csrf_http={}; Path=/'.format(token_http))
-             ]
+            [
+                ("Set-Cookie", "csrf_https={}; Path=/; secure".format(token_secure)),
+                ("Set-Cookie", "csrf_http={}; Path=/".format(token_http)),
+            ],
         )
 
     def test_existing_cookie_csrf_does_not_set_cookie(self):
-        request = DummyRequest(scheme='https')
-        request.cookies = {'csrf_https': 'e6f325fee5974f3da4315a8ccf4513d2'}
+        request = DummyRequest(scheme="https")
+        request.cookies = {"csrf_https": "e6f325fee5974f3da4315a8ccf4513d2"}
 
         policy = self._makeOne()
         token_secure = policy.get_csrf_token(request)
 
-        self.assertEqual(
-            token_secure,
-            'e6f325fee5974f3da4315a8ccf4513d2'
-        )
+        self.assertEqual(token_secure, "e6f325fee5974f3da4315a8ccf4513d2")
         self.assertEqual(len(request.response_callbacks), 0)
 
     def test_new_cookie_csrf_with_existing_cookie_sets_cookies(self):
-        request = DummyRequest(scheme='https')
-        request.cookies = {'csrf_https': 'e6f325fee5974f3da4315a8ccf4513d2'}
+        request = DummyRequest(scheme="https")
+        request.cookies = {"csrf_https": "e6f325fee5974f3da4315a8ccf4513d2"}
 
         policy = self._makeOne()
         token_secure = policy.new_csrf_token(request)
-        token_http = policy.get_csrf_token_scheme(request, 'http')
+        token_http = policy.get_csrf_token_scheme(request, "http")
 
         response = MockResponse()
         request.response_callback(request, response)
         self.assertEqual(
             response.headerlist,
-            [('Set-Cookie', 'csrf_https={}; Path=/; secure; SameSite=Lax'.format(token_secure)),
-             ('Set-Cookie', 'csrf_http={}; Path=/; SameSite=Lax'.format(token_http))
-             ]
+            [
+                (
+                    "Set-Cookie",
+                    "csrf_https={}; Path=/; secure; SameSite=Lax".format(token_secure),
+                ),
+                ("Set-Cookie", "csrf_http={}; Path=/; SameSite=Lax".format(token_http)),
+            ],
         )
 
     def test_get_csrf_token_returns_the_new_token(self):
-        request = DummyRequest(scheme='https')
-        request.cookies = {'csrf_https': 'foo'}
+        request = DummyRequest(scheme="https")
+        request.cookies = {"csrf_https": "foo"}
 
         policy = self._makeOne()
-        self.assertEqual(policy.get_csrf_token(request), 'foo')
+        self.assertEqual(policy.get_csrf_token(request), "foo")
 
         token_secure = policy.new_csrf_token(request)
-        self.assertNotEqual(token_secure, 'foo')
+        self.assertNotEqual(token_secure, "foo")
         self.assertEqual(token_secure, policy.get_csrf_token(request))
 
     def test_check_csrf_token(self):
-        request = DummyRequest(scheme='https')
+        request = DummyRequest(scheme="https")
 
         policy = self._makeOne()
-        self.assertFalse(policy.check_csrf_token(request, 'foo'))
+        self.assertFalse(policy.check_csrf_token(request, "foo"))
 
-        request.cookies = {'csrf_https': 'foo'}
-        self.assertTrue(policy.check_csrf_token(request, 'foo'))
-        self.assertFalse(policy.check_csrf_token(request, 'bar'))
+        request.cookies = {"csrf_https": "foo"}
+        self.assertTrue(policy.check_csrf_token(request, "foo"))
+        self.assertFalse(policy.check_csrf_token(request, "bar"))

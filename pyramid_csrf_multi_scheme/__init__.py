@@ -10,7 +10,7 @@ from pyramid.util import strings_differ
 from pyramid.util import SimpleSerializer
 
 
-__VERSION__ = '0.0.10'
+__VERSION__ = "0.0.11dev"
 
 
 # ==============================================================================
@@ -34,22 +34,25 @@ class DualCookieCSRFStoragePolicy(object):
 
     NOTE: this does not support a ``secure`` argument
     """
+
     _token_factory = staticmethod(lambda: text_(uuid.uuid4().hex))
 
     def __init__(
         self,
-        cookie_name_secure='csrf_https',
-        cookie_name_http='csrf_http',
+        cookie_name_secure="csrf_https",
+        cookie_name_http="csrf_http",
         secure=None,
         httponly=False,
         domain=None,
         max_age=None,
-        path='/',
-        samesite='Lax',
+        path="/",
+        samesite="Lax",
     ):
         if secure is not None:
-            raise ValueError("`DualCookieCSRFStoragePolicy` does not support "
-                             "the `secure` argument.")
+            raise ValueError(
+                "`DualCookieCSRFStoragePolicy` does not support "
+                "the `secure` argument."
+            )
         serializer = SimpleSerializer()
         self.cookie_name_secure = cookie_name_secure
         self.cookie_name_http = cookie_name_http
@@ -79,11 +82,12 @@ class DualCookieCSRFStoragePolicy(object):
         """
         Returns the active cookie profile for the request's scheme.
         """
-        raise ValueError("`DualCookieCSRFStoragePolicy` supports access "
-                         "via the attributes `.cookie_profile_secure` and "
-                         "via the attributes `.cookie_profile_http`. The "
-                         "attribute `.cookie_profile` is not supported."
-                         )
+        raise ValueError(
+            "`DualCookieCSRFStoragePolicy` supports access "
+            "via the attributes `.cookie_profile_secure` and "
+            "via the attributes `.cookie_profile_http`. The "
+            "attribute `.cookie_profile` is not supported."
+        )
 
     def new_csrf_token(self, request):
         """ Sets a new CSRF token into the request and returns it. """
@@ -93,10 +97,8 @@ class DualCookieCSRFStoragePolicy(object):
             request.cookies[self.cookie_name_secure] = token
 
             def _set_cookie(request, response):
-                self.cookie_profile_secure.set_cookies(
-                    response,
-                    token,
-                )
+                self.cookie_profile_secure.set_cookies(response, token)
+
             request.add_response_callback(_set_cookie)
             return token
 
@@ -105,16 +107,14 @@ class DualCookieCSRFStoragePolicy(object):
             request.cookies[self.cookie_name_http] = token
 
             def _set_cookie(request, response):
-                self.cookie_profile_http.set_cookies(
-                    response,
-                    token,
-                )
+                self.cookie_profile_http.set_cookies(response, token)
+
             request.add_response_callback(_set_cookie)
             return token
 
         # if we are on https, reset the http and https
         # but only consult the https for data
-        if request.scheme == 'https':
+        if request.scheme == "https":
             token_http = _token_http()  # noqa
             token_secure = _token_secure()
             return token_secure
@@ -128,7 +128,7 @@ class DualCookieCSRFStoragePolicy(object):
         Returns the currently active CSRF token by checking the cookies
         sent with the current request.
         """
-        if request.scheme == 'https':
+        if request.scheme == "https":
             # only consult the secure cookie
             bound_cookies = self.cookie_profile_secure.bind(request)
         else:
@@ -142,15 +142,14 @@ class DualCookieCSRFStoragePolicy(object):
     def check_csrf_token(self, request, supplied_token):
         """ Returns ``True`` if the ``supplied_token`` is valid."""
         expected_token = self.get_csrf_token(request)
-        return not strings_differ(
-            bytes_(expected_token), bytes_(supplied_token))
+        return not strings_differ(bytes_(expected_token), bytes_(supplied_token))
 
     def get_csrf_token_scheme(self, request, scheme):
         """this is a utility for testing"""
-        if scheme not in ('https', 'http'):
+        if scheme not in ("https", "http"):
             raise ValueError("unknown scheme")
-        if scheme == 'https':
-            if request.scheme != 'https':
+        if scheme == "https":
+            if request.scheme != "https":
                 return None
             bound_cookies = self.cookie_profile_secure.bind(request)
             token = bound_cookies.get_value()

@@ -19,18 +19,14 @@ from setuptools import find_packages
 
 # store version in the init.py
 import re
+
 with open(
-        os.path.join(
-            os.path.dirname(__file__),
-            'pyramid_csrf_multi_scheme', '__init__.py')) as v_file:
-    VERSION = re.compile(
-        r".*__VERSION__ = '(.*?)'",
-        re.S).match(v_file.read()).group(1)
+    os.path.join(os.path.dirname(__file__), "pyramid_csrf_multi_scheme", "__init__.py")
+) as v_file:
+    VERSION = re.compile(r".*__VERSION__ = '(.*?)'", re.S).match(v_file.read()).group(1)
 
 
-requires = [
-    "pyramid>=1.10.4",
-]
+requires = ["pyramid>=1.10.4"]
 
 setup(
     name="pyramid_csrf_multi_scheme",
@@ -50,16 +46,14 @@ setup(
         "License :: Repoze Public License",
     ],
     keywords="web pyramid csrf",
-    packages=['pyramid_csrf_multi_scheme',
-              'pyramid_csrf_multi_scheme.tests',
-              ],
+    packages=["pyramid_csrf_multi_scheme", "pyramid_csrf_multi_scheme.tests"],
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
     url="https://github.com/jvanasco/pyramid_csrf_multi_scheme",
     license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
     include_package_data=True,
     zip_safe=False,
-    tests_require = requires,
-    install_requires = requires,
+    tests_require=requires,
+    install_requires=requires,
     test_suite="pyramid_csrf_multi_scheme.tests",
 )
