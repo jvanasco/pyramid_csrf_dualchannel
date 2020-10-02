@@ -1,5 +1,7 @@
 0.0.11dev
 	black
+	* upgraded black; 20.8b1
+	* integrated with pre-commit
 
 0.0.10
 	updated the panel to handle situations where no response exists.  this is an edge case that happens when there is another failure.
