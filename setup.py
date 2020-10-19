@@ -31,6 +31,7 @@ requires = [
 ]
 tests_require = [
     "pytest",
+    "pyramid_debugtoolbar>=4.0.0",
 ]
 testing_extras = tests_require + []
 
