@@ -10,7 +10,7 @@ from pyramid.util import strings_differ
 from pyramid.util import SimpleSerializer
 
 
-__VERSION__ = "0.0.11dev"
+__VERSION__ = "0.1.0dev0"
 
 
 # ==============================================================================

@@ -1,0 +1,2 @@
+* improve debugtoolbar tests
+	- current tests only check for presences, not config or how it works

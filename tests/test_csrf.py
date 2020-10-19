@@ -1,9 +1,15 @@
+# stdlib
 import unittest
 
+# pypi
 from pyramid.config import Configurator
-
-from .. import DualCookieCSRFStoragePolicy
 from pyramid.interfaces import ICSRFStoragePolicy
+
+# our local tested package
+from pyramid_csrf_multi_scheme import DualCookieCSRFStoragePolicy
+
+
+# ==============================================================================
 
 
 class DummyRequest(object):
