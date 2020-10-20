@@ -1,5 +1,6 @@
-0.1.0dev0
-	* github actions and tests	
+0.1.0
+	* github actions and tests
+	
 
 0.0.11dev
 	* black

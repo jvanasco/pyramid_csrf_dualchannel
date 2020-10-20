@@ -20,9 +20,15 @@ from setuptools import find_packages
 # store version in the init.py
 import re
 
-with open(
-    os.path.join(os.path.dirname(__file__), "pyramid_csrf_multi_scheme", "__init__.py")
-) as v_file:
+HERE = os.path.dirname(__file__)
+
+long_description = (
+    description
+) = "Provides for creating independent csrf tokens for the http and https schemes"
+with open(os.path.join(HERE, "README.md")) as r_file:
+    long_description = r_file.read()
+
+with open(os.path.join(HERE, "pyramid_csrf_multi_scheme", "__init__.py")) as v_file:
     VERSION = re.compile(r'.*__VERSION__ = "(.*?)"', re.S).match(v_file.read()).group(1)
 
 
@@ -38,12 +44,9 @@ testing_extras = tests_require + []
 setup(
     name="pyramid_csrf_multi_scheme",
     version=VERSION,
-    description="provides for creating independent csrf tokens for the http and https schemes",
-    long_description="""This package enables two separate cookie tokens on each request, bound to the scheme:
-
-* a secure HTTPS-only cookie
-* a mixed-use INSECURE http token
-""",
+    description=description,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
