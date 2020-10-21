@@ -25,7 +25,7 @@ HERE = os.path.dirname(__file__)
 long_description = (
     description
 ) = "Provides for creating independent csrf tokens for the http and https schemes"
-with open(os.path.join(HERE, "README.md")) as r_file:
+with open(os.path.join(HERE, "README.rst")) as r_file:
     long_description = r_file.read()
 
 with open(os.path.join(HERE, "pyramid_csrf_multi_scheme", "__init__.py")) as v_file:
@@ -46,7 +46,6 @@ setup(
     version=VERSION,
     description=description,
     long_description=long_description,
-    long_description_content_type="text/markdown",
     classifiers=[
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
