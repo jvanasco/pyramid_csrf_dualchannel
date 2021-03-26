@@ -1,5 +1,10 @@
-include README.md
-include pyramid_csrf_multi_scheme/debugtoolbar/__init__.py
-include pyramid_csrf_multi_scheme/debugtoolbar/panels/__init__.py
-include pyramid_csrf_multi_scheme/debugtoolbar/panels/csrf_multi_scheme.py
-include pyramid_csrf_multi_scheme/debugtoolbar/panels/templates/csrf_multi_scheme.dbtmako
+graft src
+graft tests
+
+include setup.cfg pyproject.toml
+include tox.ini
+include CHANGES.txt
+include LICENSE.txt
+include README.rst
+
+recursive-exclude * __pycache__ *.py[cod] .DS_Store

@@ -28,7 +28,9 @@ long_description = (
 with open(os.path.join(HERE, "README.rst")) as r_file:
     long_description = r_file.read()
 
-with open(os.path.join(HERE, "pyramid_csrf_multi_scheme", "__init__.py")) as v_file:
+with open(
+    os.path.join(HERE, "src", "pyramid_csrf_multi_scheme", "__init__.py")
+) as v_file:
     VERSION = re.compile(r'.*__VERSION__ = "(.*?)"', re.S).match(v_file.read()).group(1)
 
 
@@ -55,14 +57,15 @@ setup(
         "License :: Repoze Public License",
     ],
     keywords="web pyramid csrf",
-    packages=[
-        "pyramid_csrf_multi_scheme",
-    ],
+    packages=find_packages(
+        where="src",
+    ),
+    package_dir={"": "src"},
+    include_package_data=True,
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
     url="https://github.com/jvanasco/pyramid_csrf_multi_scheme",
     license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
-    include_package_data=True,
     zip_safe=False,
     tests_require=tests_require,
     extras_require={
