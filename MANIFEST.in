@@ -5,6 +5,7 @@ include setup.cfg pyproject.toml
 include tox.ini
 include CHANGES.txt
 include LICENSE.txt
+include LICENSE-pyramid.txt
 include README.rst
 
 recursive-exclude * __pycache__ *.py[cod] .DS_Store

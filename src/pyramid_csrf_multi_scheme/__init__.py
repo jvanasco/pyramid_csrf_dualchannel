@@ -1,16 +1,51 @@
+# stdlib
+import sys
 import uuid
 
-from webob.cookies import CookieProfile
-from zope.interface import implementer
-
-from pyramid.compat import bytes_
-from pyramid.compat import text_
+# pypi
 from pyramid.interfaces import ICSRFStoragePolicy
 from pyramid.util import strings_differ
 from pyramid.util import SimpleSerializer
+from webob.cookies import CookieProfile
+from zope.interface import implementer
+
+
+# ==============================================================================
 
 
 __VERSION__ = "0.1.1"
+
+
+# ------------------------------------------------------------------------------
+
+
+"""
+The following functions are taken from Pyramid and appear under their licensing.
+
+* `pyramid.compat.bytes_`
+* `pyramid.compat.text_`
+
+See LICENSE-pyramid.TXT for more details
+"""
+
+text_type = unicode if (sys.version_info[0] == 2) else str
+binary_type = str if (sys.version_info[0] == 2) else bytes
+
+
+def text_(s, encoding="latin-1", errors="strict"):
+    """If ``s`` is an instance of ``binary_type``, return
+    ``s.decode(encoding, errors)``, otherwise return ``s``"""
+    if isinstance(s, binary_type):
+        return s.decode(encoding, errors)
+    return s
+
+
+def bytes_(s, encoding="latin-1", errors="strict"):
+    """If ``s`` is an instance of ``text_type``, return
+    ``s.encode(encoding, errors)``, otherwise return ``s``"""
+    if isinstance(s, text_type):
+        return s.encode(encoding, errors)
+    return s
 
 
 # ==============================================================================
