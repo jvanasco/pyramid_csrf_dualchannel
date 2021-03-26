@@ -26,6 +26,8 @@ Python Versions
 
 This package is currently supported under Python2.7 and 3.8; other 3.x versions may work.
 
+This package should work on Pyramid1.x and 2.x
+
 
 Why?
 ----

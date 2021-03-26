@@ -20,12 +20,10 @@ __VERSION__ = "0.1.1"
 
 
 """
-The following functions are taken from Pyramid and appear under their licensing.
+The following functions are taken from Pyramid directly.
 
 * `pyramid.compat.bytes_`
 * `pyramid.compat.text_`
-
-See LICENSE-pyramid.TXT for more details
 """
 
 text_type = unicode if (sys.version_info[0] == 2) else str
